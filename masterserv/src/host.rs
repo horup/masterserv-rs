@@ -14,7 +14,7 @@ impl<T: Game> Host<T> {
         Host {
             name: name.into(),
             current_players: 0,
-            max_players: T::default_max_players(),
+            max_players: 98,
             data: PhantomData::default(),
         }
     }

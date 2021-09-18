@@ -1,10 +1,11 @@
+use masterserv_server::Server;
+
 #[tokio::main]
 async fn main() {
     println!("Starting testbench");
 
-    tokio::spawn(async {
-        println!("Spawning Server");
-    });
+    let server = Server::new();
+    server.spawn();
 
     let mut clients = Vec::new();
     for i in 0..10 {
