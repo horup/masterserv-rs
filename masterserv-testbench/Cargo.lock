@@ -242,6 +242,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "masterserv-testbench"
+version = "0.1.0"
+dependencies = [
+ "masterserv",
+ "masterserv-server",
+ "tokio",
+]
+
+[[package]]
 name = "matches"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"

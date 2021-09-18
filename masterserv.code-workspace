@@ -1,19 +1,21 @@
 {
 	"folders": [
 		{
-			"name": "masterserv",
-			"path": "./masterserv"
-		},
-		{
-			"name": "testclient",
-			"path": "./testclient"
-		},
-		{
 			"name": "doc",
 			"path": "./doc"
 		},
 		{
+			"name": "lib",
+			"path": "./masterserv"
+		},
+
+		{
+			"name": "server",
 			"path": "masterserv-server"
+		},
+		{
+			"name": "testbench",
+			"path": "masterserv-testbench"
 		}
 	],
 	"settings": {}
