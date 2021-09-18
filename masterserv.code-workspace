@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "masterserv",
+			"path": "./masterserv"
+		},
+		{
+			"name": "testclient",
+			"path": "./testclient"
+		},
+		{
+			"name": "doc",
+			"path": "./doc"
+		}
+		
+	],
+	"settings": {}
+}
