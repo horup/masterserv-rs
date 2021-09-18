@@ -1,0 +1,4 @@
+pub trait Socket : Default {
+
+
+}
