@@ -11,8 +11,10 @@
 		{
 			"name": "doc",
 			"path": "./doc"
+		},
+		{
+			"path": "masterserv-server"
 		}
-		
 	],
 	"settings": {}
 }
