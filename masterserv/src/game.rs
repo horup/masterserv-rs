@@ -13,7 +13,7 @@ pub trait Game : Send {
 
     fn update(&mut self, delta_sec:f32);
 
-    fn tick_rate(&self) -> u32 {
+    fn tick_rate(&self) -> u64 {
         return 20;
     }
 }

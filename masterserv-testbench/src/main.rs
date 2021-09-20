@@ -5,7 +5,7 @@ async fn main() {
     println!("Starting testbench");
 
     let server = Server::new();
-    server.spawn();
+    let server = server.spawn();
 
     let mut clients = Vec::new();
     for i in 0..10 {
@@ -19,6 +19,7 @@ async fn main() {
     for client in clients {
         let _ = client.await;
     }
+    let _ = server.await;
 
-    print!("Ending testbench...");
+    println!("Ending testbench...");
 }
