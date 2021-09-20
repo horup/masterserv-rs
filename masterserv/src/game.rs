@@ -1,5 +1,7 @@
+use uuid::Uuid;
+
 pub trait Game : Send {
-    fn start(&mut self) {
+    fn start(&mut self, id:Uuid, name:String) {
 
     }
 

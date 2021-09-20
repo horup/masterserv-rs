@@ -1,5 +1,7 @@
 use std::time::Instant;
 
+use uuid::Uuid;
+
 use crate::{Game, GameType};
 
 pub struct DummyGame {
@@ -20,8 +22,8 @@ impl GameType for DummyGame {
 }
 
 impl Game for DummyGame {
-    fn start(&mut self) {
-        //println!("Starting DummyGame");
+    fn start(&mut self, id:Uuid, name:String) {
+        println!("Starting DummyGame with name '{}'", name);
     }
 
     fn update(&mut self, delta_sec:f32) {

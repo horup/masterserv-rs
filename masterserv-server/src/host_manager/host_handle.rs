@@ -6,6 +6,7 @@ use crate::HostMsg;
 
 pub struct HostHandle {
     pub id:Uuid,
+    pub name:String,
     pub messages:Arc<Mutex<Vec<HostMsg>>>
 }
 

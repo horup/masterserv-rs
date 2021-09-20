@@ -42,9 +42,6 @@ async fn accept(stream:TcpStream) {
 mod ws_server;
 pub use ws_server::*;
 
-mod server;
-pub use server::*;
-
 mod host_manager;
 pub use host_manager::*;
 
