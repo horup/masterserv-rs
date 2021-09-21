@@ -1,9 +1,11 @@
+use masterserv::log::{LevelFilter, info};
 use masterserv::{DummyGame, uuid::Uuid};
 use masterserv_server::{HostServer, HostServerMsg, WSServer};
 
 #[tokio::main]
 async fn main() {
-    println!("Starting testbench");
+    env_logger::builder().filter_level(LevelFilter::Debug).init();
+    info!("Starting testbench");
 
     // instantiate
     let mut ws_server = WSServer::new("0.0.0.0:8080".into());
@@ -19,18 +21,18 @@ async fn main() {
     let ws_server = ws_server.spawn();
 
     // make some hosts
-    for i in 0..100 {
+    for i in 0..3 {
+        let id = Uuid::new_v4();
         let _ = host_manager_tx.send(HostServerMsg::SpawnHost {
             game_type:"DummyGame".into(),
             name:format!("Game {}", i),
-            id:Uuid::new_v4()
+            id
         });
     }
 
     let mut clients = Vec::new();
     for i in 0..10 {
         let handle = tokio::spawn(async move {
-            println!("Spawning Client {}", i);
         });
 
         clients.push(handle);
@@ -44,5 +46,5 @@ async fn main() {
     let _ = host_manager.await;
     let _ = ws_server.await;
 
-    println!("Ending testbench...");
+    info!("Ending testbench...");
 }

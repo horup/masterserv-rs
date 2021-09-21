@@ -9,3 +9,4 @@ edition = "2018"
 masterserv-server = {path = "../masterserv-server"}
 masterserv = {path = "../masterserv"}
 tokio = { version = "1", features = ["full"] }
+env_logger = "0.8.4"
