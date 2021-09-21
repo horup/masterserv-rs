@@ -1,4 +1,4 @@
 #[derive(Clone)]
-pub struct HostMsg {
-    
+pub enum HostMsg {
+    Kill
 }

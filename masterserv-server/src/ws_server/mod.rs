@@ -1,3 +1,4 @@
+use masterserv::log::info;
 use tokio::{net::TcpListener, sync::mpsc::{UnboundedSender}, task::JoinHandle};
 
 use crate::HostServerMsg;
@@ -8,7 +9,6 @@ pub struct WSServer {
     addr:String,
     host_manager:Option<UnboundedSender<HostServerMsg>>
 }
-
 
 impl WSServer {
     pub fn new(addr:String) -> Self {
@@ -22,6 +22,7 @@ impl WSServer {
     }
     pub fn spawn(self) -> JoinHandle<()> {
         return tokio::spawn(async move {
+            info!("Spawned");
             let try_socket = TcpListener::bind(&self.addr).await;
             let listener = try_socket.expect("WSServer: Failed to bind!");
         

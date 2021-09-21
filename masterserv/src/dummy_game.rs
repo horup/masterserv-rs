@@ -1,5 +1,6 @@
 use std::time::Instant;
 
+use log::info;
 use uuid::Uuid;
 
 use crate::{Game, GameType};
@@ -23,7 +24,7 @@ impl GameType for DummyGame {
 
 impl Game for DummyGame {
     fn start(&mut self, id:Uuid, name:String) {
-        println!("Starting DummyGame with name '{}'", name);
+        info!("Starting DummyGame with name '{}'", name);
     }
 
     fn update(&mut self, delta_sec:f32) {
