@@ -85,7 +85,8 @@ impl HostServer {
 
             // terminate existing host if any
             if let Some(existing) = self.hosts.get(&id) {
-                self.kill_host(existing.id);
+                let id = existing.id.clone();
+                self.kill_host(id);
             }
 
             self.hosts.insert(id, handle);

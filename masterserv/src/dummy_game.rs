@@ -23,11 +23,11 @@ impl GameType for DummyGame {
 }
 
 impl Game for DummyGame {
-    fn start(&mut self, id:Uuid, name:String) {
+    fn start(&mut self, _id:Uuid, name:String) {
         info!("Starting DummyGame with name '{}'", name);
     }
 
-    fn update(&mut self, delta_sec:f32) {
+    fn update(&mut self, _delta_sec:f32) {
         // do some work
        for y in 0..64 {
             for x in 0..64 {
