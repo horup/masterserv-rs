@@ -1,4 +1,7 @@
-use masterserv::{Game, GameType, uuid::{self, Uuid}};
+use masterserv::{
+    uuid::{self, Uuid},
+    Game, GameType,
+};
 use std::{
     collections::HashMap,
     sync::{Arc, Mutex},
@@ -8,8 +11,8 @@ use std::{
 mod host_handle;
 pub use host_handle::*;
 
-mod host_msg;
-pub use host_msg::*;
+mod msg;
+pub use msg::*;
 
 mod host_manager_msg;
 pub use host_manager_msg::*;
@@ -20,16 +23,16 @@ use tokio::{
     time::{interval, sleep},
 };
 
-pub struct HostManager {
+pub struct HostServer {
     pub game_types: HashMap<&'static str, Arc<dyn Fn() -> Box<dyn Game> + Sync + Send>>,
     pub hosts: Vec<HostHandle>,
-    pub rx: UnboundedReceiver<HostManagerMsg>,
-    pub tx: UnboundedSender<HostManagerMsg>,
+    pub rx: UnboundedReceiver<HostServerMsg>,
+    pub tx: UnboundedSender<HostServerMsg>,
 }
 
-impl HostManager {
+impl HostServer {
     pub fn new() -> Self {
-        let (tx, rx) = mpsc::unbounded_channel::<HostManagerMsg>();
+        let (tx, rx) = mpsc::unbounded_channel::<HostServerMsg>();
         Self {
             game_types: Default::default(),
             hosts: Default::default(),
@@ -49,7 +52,7 @@ impl HostManager {
         );
     }
 
-    pub fn spawn_host(&mut self, id:Uuid, game_type_name: &str, name:String) {
+    pub fn spawn_host(&mut self, id: Uuid, game_type_name: &str, name: String) {
         let mut handle = HostHandle {
             id,
             name: name.clone(),
@@ -79,23 +82,24 @@ impl HostManager {
         }
     }
 
-    pub fn spawn(mut self) -> (UnboundedSender<HostManagerMsg>, JoinHandle<()>) {
-        return (
-            self.tx.clone(),
-            tokio::spawn(async move {
-                loop {
-                    if let Some(msg) = self.rx.recv().await {
-                        match msg {
-                            HostManagerMsg::SpawnHost { id, game_type , name} => {
-                                self.spawn_host(id, &game_type, name);
-                            },
-                            HostManagerMsg::KillHost { id } => todo!(),
+    pub fn spawn(mut self) -> JoinHandle<()> {
+        tokio::spawn(async move {
+            loop {
+                if let Some(msg) = self.rx.recv().await {
+                    match msg {
+                        HostServerMsg::SpawnHost {
+                            id,
+                            game_type,
+                            name,
+                        } => {
+                            self.spawn_host(id, &game_type, name);
                         }
-                    } else {
-                        break;
+                        HostServerMsg::KillHost { id } => todo!(),
                     }
+                } else {
+                    break;
                 }
-            }),
-        );
+            }
+        })
     }
 }

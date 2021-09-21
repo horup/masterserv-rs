@@ -1,17 +1,24 @@
-use tokio::{net::TcpListener, task::JoinHandle};
+use tokio::{net::TcpListener, sync::mpsc::{UnboundedSender}, task::JoinHandle};
+
+use crate::HostServerMsg;
 
 
 #[derive(Default)]
 pub struct WSServer { 
-    pub addr:String
+    addr:String,
+    host_manager:Option<UnboundedSender<HostServerMsg>>
 }
 
 
 impl WSServer {
     pub fn new(addr:String) -> Self {
         Self {
-            addr
+            addr,
+            host_manager:Default::default()
         }
+    }
+    pub fn set_host_manager(&mut self, host_manager:UnboundedSender<HostServerMsg>) {
+        self.host_manager = Some(host_manager);
     }
     pub fn spawn(self) -> JoinHandle<()> {
         return tokio::spawn(async move {

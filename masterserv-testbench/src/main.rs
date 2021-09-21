@@ -1,21 +1,26 @@
 use masterserv::{DummyGame, uuid::Uuid};
-use masterserv_server::{HostManager, HostManagerMsg, WSServer};
+use masterserv_server::{HostServer, HostServerMsg, WSServer};
 
 #[tokio::main]
 async fn main() {
     println!("Starting testbench");
 
-    let ws_server = WSServer::new("0.0.0.0:8080".into());
-    let ws_server = ws_server.spawn();
+    // instantiate
+    let mut ws_server = WSServer::new("0.0.0.0:8080".into());
+    let mut host_manager = HostServer::new();
 
-    let mut host_manager = HostManager::new();
+    // configure
     host_manager.register_game_type::<DummyGame>();
+    let host_manager_tx = host_manager.tx.clone();
+    ws_server.set_host_manager(host_manager.tx.clone());
     
-    let (host_manager_tx, host_manager) = host_manager.spawn();
+    // spawn
+    let host_manager = host_manager.spawn();
+    let ws_server = ws_server.spawn();
 
     // make some hosts
     for i in 0..100 {
-        let _ = host_manager_tx.send(HostManagerMsg::SpawnHost {
+        let _ = host_manager_tx.send(HostServerMsg::SpawnHost {
             game_type:"DummyGame".into(),
             name:format!("Game {}", i),
             id:Uuid::new_v4()
