@@ -1,5 +1,5 @@
 use masterserv::{Game, GameType, log::{debug, info}, uuid::{Uuid}};
-use std::{collections::HashMap, sync::{Arc, Mutex}, time::{Duration}};
+use std::{collections::HashMap, sync::{Arc, Mutex}};
 
 mod msg;
 pub use msg::*;
@@ -9,8 +9,7 @@ pub use host::*;
 
 use tokio::{
     sync::mpsc::{self, UnboundedReceiver, UnboundedSender},
-    task::JoinHandle,
-    time::{interval},
+    task::JoinHandle
 };
 
 pub struct HostServer {
@@ -84,7 +83,7 @@ impl HostServer {
                         } => {
                             self.spawn_host(id, &game_type, name);
                         }
-                        HostServerMsg::KillHost { id } => {
+                        HostServerMsg::TerminateHost { id } => {
                             self.kill_host(id);
                         },
                     }
@@ -123,7 +122,7 @@ impl HostServer {
     pub fn kill_host(&mut self, host_id:Uuid) {
         if let Some(handle) = self.hosts.get_mut(&host_id) {
             if let Ok(mut messages) = handle.messages.lock() {
-                messages.push(HostMsg::Kill);
+                messages.push(HostMsg::Terminate);
             }
         }
 

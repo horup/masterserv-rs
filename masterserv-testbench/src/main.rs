@@ -31,7 +31,7 @@ async fn main() {
     }
 
     let mut clients = Vec::new();
-    for i in 0..10 {
+    for _i in 0..10 {
         let handle = tokio::spawn(async move {
         });
 

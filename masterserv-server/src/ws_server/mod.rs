@@ -26,7 +26,7 @@ impl WSServer {
             let try_socket = TcpListener::bind(&self.addr).await;
             let listener = try_socket.expect("WSServer: Failed to bind!");
         
-            while let Ok((stream, _)) = listener.accept().await {
+            while let Ok((_stream, _)) = listener.accept().await {
                 //tokio::spawn(accept(stream));
             }
         });

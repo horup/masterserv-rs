@@ -1,4 +1,4 @@
-22-09-2021  30m refactored structure a bit, worked on Host implementation
+22-09-2021  30m+ refactored structure a bit, worked on Host implementation, fixed some warnings
 21-09-2021  60m worked on messages back and forth between major components, added logging
 20-09-2021  110m played with async and timing, refactored structure a bit, started on WSServer, added mpsc channel for HostManager, added HostManagerMsg
 19-09-2021  60m played with async

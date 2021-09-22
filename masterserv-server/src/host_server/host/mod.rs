@@ -1,7 +1,7 @@
 mod msg;
-use std::{sync::{Arc, Mutex}, time::Duration};
+use std::time::Duration;
 
-use masterserv::{Game, log::info, uuid::Uuid};
+use masterserv::log::info;
 pub use msg::*;
 
 mod handle;
@@ -9,16 +9,14 @@ pub use handle::*;
 use tokio::time::interval;
 
 pub struct Host {
-    handle:HostHandle
+    handle: HostHandle,
 }
 
 impl Host {
-    pub fn new(handle:HostHandle) -> Self {
-        Host {
-            handle
-        }
+    pub fn new(handle: HostHandle) -> Self {
+        Host { handle }
     }
-    
+
     pub fn spawn(mut self) {
         tokio::spawn(async move {
             info!("{:?} Spawned", self.handle.id);
@@ -50,7 +48,7 @@ impl Host {
 
             for msg in host_messages {
                 match msg {
-                    HostMsg::Kill => run = false,
+                    HostMsg::Terminate => run = false,
                 }
             }
 
@@ -58,8 +56,4 @@ impl Host {
             timer.tick().await;
         }
     }
-}
-
-pub fn spawn_host(messages:Arc<Mutex<Vec<HostMsg>>>, game:Arc<dyn Fn() -> Box<dyn Game> + Sync + Send>) {
-
 }

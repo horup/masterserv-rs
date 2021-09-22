@@ -7,7 +7,7 @@ pub enum HostServerMsg {
         name:String,
         game_type:String
     },
-    KillHost {
+    TerminateHost {
         id:Uuid
     }
 }
