@@ -1,14 +1,11 @@
 use masterserv::{Game, GameType, log::{debug, info}, uuid::{Uuid}};
 use std::{collections::HashMap, sync::{Arc, Mutex}, time::{Duration}};
 
-mod host_handle;
-pub use host_handle::*;
-
 mod msg;
 pub use msg::*;
 
-mod host_manager_msg;
-pub use host_manager_msg::*;
+mod host;
+pub use host::*;
 
 use tokio::{
     sync::mpsc::{self, UnboundedReceiver, UnboundedSender},
