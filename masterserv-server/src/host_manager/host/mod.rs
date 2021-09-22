@@ -19,7 +19,7 @@ impl Host {
 
     pub fn spawn(mut self) {
         tokio::spawn(async move {
-            info!("{:?} Spawned", self.handle.id);
+            info!("{:?} Spawned with name '{}' and game type '{}'", self.handle.id, self.handle.name, self.handle.game_type_name);
             self.run().await;
             info!("{:?} Terminated", self.handle.id);
         });
