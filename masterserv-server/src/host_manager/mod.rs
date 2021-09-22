@@ -12,16 +12,16 @@ use tokio::{
     task::JoinHandle
 };
 
-pub struct HostServer {
+pub struct HostManager {
     pub game_types: HashMap<&'static str, Arc<dyn Fn() -> Box<dyn Game> + Sync + Send>>,
     pub hosts: HashMap<Uuid, HostHandle>,
-    pub rx: UnboundedReceiver<HostServerMsg>,
-    pub tx: UnboundedSender<HostServerMsg>,
+    pub rx: UnboundedReceiver<HostManagerMsg>,
+    pub tx: UnboundedSender<HostManagerMsg>,
 }
 
-impl HostServer {
+impl HostManager {
     pub fn new() -> Self {
-        let (tx, rx) = mpsc::unbounded_channel::<HostServerMsg>();
+        let (tx, rx) = mpsc::unbounded_channel::<HostManagerMsg>();
         Self {
             game_types: Default::default(),
             hosts: Default::default(),
@@ -76,14 +76,14 @@ impl HostServer {
                 if let Some(msg) = self.rx.recv().await {
                     debug!("Received: {:?}", msg);
                     match msg {
-                        HostServerMsg::SpawnHost {
+                        HostManagerMsg::SpawnHost {
                             id,
                             game_type,
                             name,
                         } => {
                             self.spawn_host(id, &game_type, name);
                         }
-                        HostServerMsg::TerminateHost { id } => {
+                        HostManagerMsg::TerminateHost { id } => {
                             self.kill_host(id);
                         },
                     }

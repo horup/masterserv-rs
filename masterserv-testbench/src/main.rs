@@ -1,6 +1,6 @@
 use masterserv::log::{LevelFilter, info};
 use masterserv::{DummyGame, uuid::Uuid};
-use masterserv_server::{HostServer, HostServerMsg, WSServer};
+use masterserv_server::{HostManager, HostManagerMsg, WSServer};
 
 #[tokio::main]
 async fn main() {
@@ -9,7 +9,7 @@ async fn main() {
 
     // instantiate
     let mut ws_server = WSServer::new("0.0.0.0:8080".into());
-    let mut host_manager = HostServer::new();
+    let mut host_manager = HostManager::new();
 
     // configure
     host_manager.register_game_type::<DummyGame>();
@@ -23,7 +23,7 @@ async fn main() {
     // make some hosts
     for i in 0..3 {
         let id = Uuid::new_v4();
-        let _ = host_manager_tx.send(HostServerMsg::SpawnHost {
+        let _ = host_manager_tx.send(HostManagerMsg::SpawnHost {
             game_type:"DummyGame".into(),
             name:format!("Game {}", i),
             id
