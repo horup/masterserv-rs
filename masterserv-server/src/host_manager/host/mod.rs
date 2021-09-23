@@ -1,8 +1,6 @@
-mod msg;
 use std::time::Duration;
 
-use masterserv::log::info;
-pub use msg::*;
+use masterserv::{Context, HostMsg, log::info};
 
 mod handle;
 pub use handle::*;
@@ -43,16 +41,21 @@ impl Host {
         let mut run = true;
         game.start(self.handle.id, self.handle.name.clone());
         while run {
-            // pop messages
             let host_messages = self.pop_messages();
-
-            for msg in host_messages {
+            for msg in &host_messages {
                 match msg {
                     HostMsg::Terminate => run = false,
+                    _ => {}
                 }
             }
 
-            game.update(period.as_secs_f32());
+            let context = Context {
+                delta_seconds:period.as_secs_f32(),
+                messages_from_host:host_messages,
+                messages_to_player:Vec::new()
+            };
+
+            game.update(context);
             timer.tick().await;
         }
     }

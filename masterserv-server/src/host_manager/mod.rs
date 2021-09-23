@@ -1,4 +1,4 @@
-use masterserv::{Game, GameType, log::{debug, info}, uuid::{Uuid}};
+use masterserv::{HostedGame, GameType, HostMsg, log::{debug, info}, uuid::{Uuid}};
 use std::{collections::HashMap, sync::{Arc, Mutex}};
 
 mod msg;
@@ -13,7 +13,7 @@ use tokio::{
 };
 
 pub struct HostManager {
-    pub game_types: HashMap<&'static str, Arc<dyn Fn() -> Box<dyn Game> + Sync + Send>>,
+    pub game_types: HashMap<&'static str, Arc<dyn Fn() -> Box<dyn HostedGame> + Sync + Send>>,
     pub hosts: HashMap<Uuid, HostHandle>,
     pub rx: UnboundedReceiver<HostManagerMsg>,
     pub tx: UnboundedSender<HostManagerMsg>,
