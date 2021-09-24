@@ -1,6 +1,6 @@
 use masterserv::uuid::Uuid;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum BusEvent {
     ClientConnected {
         client_id:Uuid

@@ -1,32 +1,21 @@
-use masterserv::{HostedGame, GameType, HostMsg, log::{debug, info}, uuid::{Uuid}};
+use masterserv::{GameType, HostMsg, HostedGame, log::{debug, error, info}, uuid::{Uuid}};
 use std::{collections::HashMap, sync::{Arc, Mutex}};
 
-mod msg;
-pub use msg::*;
-
-use tokio::{
-    sync::mpsc::{self, UnboundedReceiver, UnboundedSender},
-    task::JoinHandle
-};
+use tokio::{sync::watch::error, task::JoinHandle};
 
 use crate::{Bus, Host, HostHandle};
 
 pub struct HostManager {
     pub game_types: HashMap<&'static str, Arc<dyn Fn() -> Box<dyn HostedGame> + Sync + Send>>,
     pub hosts: HashMap<Uuid, HostHandle>,
-    pub rx: UnboundedReceiver<HostManagerNorthMsg>,
-    pub tx: UnboundedSender<HostManagerNorthMsg>,
     pub bus:Bus
 }
 
 impl HostManager {
     pub fn new(bus:Bus) -> Self {
-        let (tx, rx) = mpsc::unbounded_channel::<HostManagerNorthMsg>();
         Self {
             game_types: Default::default(),
             hosts: Default::default(),
-            rx,
-            tx,
             bus
         }
     }
@@ -73,22 +62,33 @@ impl HostManager {
             info!("Spawned");
 
             loop {
-                if let Some(msg) = self.rx.recv().await {
-                    debug!("Received: {:?}", msg);
-                    match msg {
-                        HostManagerNorthMsg::SpawnHost {
-                            id,
-                            game_type,
-                            name,
-                        } => {
-                            self.spawn_host(id, &game_type, name);
+                match self.bus.recv.recv().await {
+                    Ok(event) => {
+                        debug!("Received: {:?}", event);
+                        match event {
+                            crate::BusEvent::ClientConnected { client_id } => {
+
+                            },
+                            crate::BusEvent::ClientDisconnected { client_id } => {
+
+                            },
+                            crate::BusEvent::SpawnHost { host_id, name, game_type } => {
+                                self.spawn_host(host_id, &game_type, name);
+                            },
+                            crate::BusEvent::TerminateHost { host_id } => {
+                                self.kill_host(host_id);
+                            },
+                            crate::BusEvent::ClientJoinedHost { host_id } => {
+
+                            },
+                            crate::BusEvent::ClientLeftHost { host_id } => {
+
+                            },
                         }
-                        HostManagerNorthMsg::TerminateHost { id } => {
-                            self.kill_host(id);
-                        }
-                    }
-                } else {
-                    break;
+                    },
+                    Err(err) => {
+                        error!("Error: {}", err);
+                    },
                 }
             }
         })
