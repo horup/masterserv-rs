@@ -3,8 +3,8 @@ mod events;
 pub use events::*;
 
 pub struct Bus {
-    send:Sender<BusEvent>,
-    recv:Receiver<BusEvent>
+    pub send:Sender<BusEvent>,
+    pub recv:Receiver<BusEvent>
 }
 
 impl Clone for Bus {
