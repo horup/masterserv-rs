@@ -1,10 +1,16 @@
 use uuid::Uuid;
-use crate::{HostMsg, PlayerMsg};
+use crate::{HostMsg, GameMsg};
 
 pub struct Context {
     pub delta_seconds:f32,
-    pub messages_to_player:Vec<PlayerMsg>,
+    pub messages_from_game:Vec<GameMsg>,
     pub messages_from_host:Vec<HostMsg>
+}
+
+impl Context {
+    pub fn push_message(&mut self, game_msg:GameMsg) {
+        self.messages_from_game.push(game_msg);
+    }
 }
 
 pub trait HostedGame : Send {
@@ -21,7 +27,7 @@ pub trait HostedGame : Send {
         return 8;
     }
 
-    fn update(&mut self, context:Context);
+    fn update(&mut self, context:&mut Context);
 
     fn tick_rate(&self) -> u64 {
         return 20;

@@ -4,29 +4,30 @@ use std::{collections::HashMap, sync::{Arc, Mutex}};
 mod msg;
 pub use msg::*;
 
-mod host;
-pub use host::*;
-
 use tokio::{
     sync::mpsc::{self, UnboundedReceiver, UnboundedSender},
     task::JoinHandle
 };
 
+use crate::{Bus, Host, HostHandle};
+
 pub struct HostManager {
     pub game_types: HashMap<&'static str, Arc<dyn Fn() -> Box<dyn HostedGame> + Sync + Send>>,
     pub hosts: HashMap<Uuid, HostHandle>,
-    pub rx: UnboundedReceiver<HostManagerMsg>,
-    pub tx: UnboundedSender<HostManagerMsg>,
+    pub rx: UnboundedReceiver<HostManagerNorthMsg>,
+    pub tx: UnboundedSender<HostManagerNorthMsg>,
+    pub bus:Bus
 }
 
 impl HostManager {
-    pub fn new() -> Self {
-        let (tx, rx) = mpsc::unbounded_channel::<HostManagerMsg>();
+    pub fn new(bus:Bus) -> Self {
+        let (tx, rx) = mpsc::unbounded_channel::<HostManagerNorthMsg>();
         Self {
             game_types: Default::default(),
             hosts: Default::default(),
             rx,
             tx,
+            bus
         }
     }
     pub fn register_game_type<T: GameType + Send>(&mut self) {
@@ -42,7 +43,6 @@ impl HostManager {
     }
 
     pub fn spawn_host(&mut self, id: Uuid, game_type_name: &str, name: String) {
-        
         if let Some(game) = self.game_types.get(game_type_name) {
             let create_game = game.clone();
             let handle = HostHandle {
@@ -76,16 +76,16 @@ impl HostManager {
                 if let Some(msg) = self.rx.recv().await {
                     debug!("Received: {:?}", msg);
                     match msg {
-                        HostManagerMsg::SpawnHost {
+                        HostManagerNorthMsg::SpawnHost {
                             id,
                             game_type,
                             name,
                         } => {
                             self.spawn_host(id, &game_type, name);
                         }
-                        HostManagerMsg::TerminateHost { id } => {
+                        HostManagerNorthMsg::TerminateHost { id } => {
                             self.kill_host(id);
-                        },
+                        }
                     }
                 } else {
                     break;

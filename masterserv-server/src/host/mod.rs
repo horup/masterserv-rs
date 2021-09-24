@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use masterserv::{Context, HostMsg, log::info};
+use masterserv::{Context, HostMsg, log::{debug, info}};
 
 mod handle;
 pub use handle::*;
@@ -39,6 +39,7 @@ impl Host {
         let period = Duration::from_millis(1000 / game.tick_rate());
         let mut timer = interval(period);
         let mut run = true;
+        
         game.start(self.handle.id, self.handle.name.clone());
         while run {
             let host_messages = self.pop_messages();
@@ -49,13 +50,18 @@ impl Host {
                 }
             }
 
-            let context = Context {
+            let mut context = Context {
                 delta_seconds:period.as_secs_f32(),
                 messages_from_host:host_messages,
-                messages_to_player:Vec::new()
+                messages_from_game:Vec::new()
             };
 
-            game.update(context);
+            game.update(&mut context);
+
+            for msg in context.messages_from_game {
+                
+            }
+
             timer.tick().await;
         }
     }

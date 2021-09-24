@@ -1,24 +1,28 @@
 use masterserv::log::info;
-use tokio::{net::TcpListener, sync::mpsc::{UnboundedSender}, task::JoinHandle};
+use tokio::{net::TcpListener, sync::{broadcast::{Receiver, Sender}, mpsc::{self, UnboundedReceiver, UnboundedSender}}, task::JoinHandle};
 
-use crate::HostManagerMsg;
+use crate::{Bus, BusEvent, HostManagerNorthMsg};
 
+mod msg;
+pub use msg::*;
 
-#[derive(Default)]
 pub struct WSServer { 
     addr:String,
-    host_manager:Option<UnboundedSender<HostManagerMsg>>
+    host_manager_sender:Option<UnboundedSender<HostManagerNorthMsg>>,
+    bus:Bus
 }
 
 impl WSServer {
-    pub fn new(addr:String) -> Self {
+    pub fn new(addr:String, bus:Bus) -> Self {
+        let (tx, rx) = mpsc::unbounded_channel::<WSServerMsg>();
         Self {
             addr,
-            host_manager:Default::default()
+            host_manager_sender:Default::default(),
+            bus
         }
     }
-    pub fn set_host_manager(&mut self, host_manager:UnboundedSender<HostManagerMsg>) {
-        self.host_manager = Some(host_manager);
+    pub fn set_host_manager(&mut self, host_manager:UnboundedSender<HostManagerNorthMsg>) {
+        self.host_manager_sender = Some(host_manager);
     }
     pub fn spawn(self) -> JoinHandle<()> {
         return tokio::spawn(async move {

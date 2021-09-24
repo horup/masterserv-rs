@@ -1,3 +1,4 @@
+use uuid::Uuid;
 use crate::Player;
 
 #[derive(Clone, Debug)]
@@ -5,12 +6,11 @@ pub enum HostMsg {
     PlayerJoined(Player),
     PlayerLeft(Player),
     Terminate,
-    PlayerMsg(Vec<u8>)
+    FromPlayer(Uuid, Vec<u8>)
 }
 
-pub enum PlayerMsg {
-    PlayerJoined(Player),
-    PlayerLeft(Player),
-    Terminate,
-    GameMsg(Vec<u8>)
+#[derive(Clone, Debug)]
+pub enum GameMsg {
+    CustomAll(Vec<u8>),
+    ToPlayer(Uuid, Vec<u8>),
 }

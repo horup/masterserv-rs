@@ -1,20 +1,37 @@
 use std::time::Instant;
-
 use log::info;
 use uuid::Uuid;
+use serde::{Serialize, Deserialize};
 
-use crate::{Context, HostedGame, GameType};
+use crate::{Context, GameMsg, GameType, HostedGame};
+
+#[derive(Clone, Copy, Serialize, Deserialize)]
+pub struct DummyState{
+    pub grid:[[u8;16];16]
+}
+
+#[derive(Serialize)]
+pub enum DummyMsg {
+    State(DummyState)
+}
+
+impl Default for DummyState {
+    fn default() -> Self {
+        Self { grid: [[0;16];16]}
+    }
+}
 
 pub struct DummyGame {
     pub test:f32,
     pub missed_count:u32,
     pub start_time:Instant,
-    pub ticks:u64
+    pub ticks:u64,
+    pub current_state:DummyState
 }
 
 impl Default for DummyGame {
     fn default() -> Self {
-        Self { test: Default::default(), missed_count: Default::default(), start_time: Instant::now(), ticks:0 }
+        Self { test: Default::default(), missed_count: Default::default(), start_time: Instant::now(), ticks:0, current_state:DummyState::default() }
     }
 }
 
@@ -27,12 +44,17 @@ impl HostedGame for DummyGame {
         info!("Starting DummyGame with name '{}'", name);
     }
 
-    fn update(&mut self, context:Context) {
+    fn update(&mut self, context:&mut Context) {
         // do some work
-       for y in 0..64 {
-            for x in 0..64 {
-                self.test = self.test + y as f32 * x as f32;
+        for row in &mut self.current_state.grid {
+            for col in row.iter_mut() {
+                *col = 0;
             }
+        }
+
+        // push a custom message containing the game state
+        if let Ok(encoded) = bincode::serialize(&self.current_state) {
+            context.push_message(GameMsg::CustomAll(encoded));
         }
 
         // calc ticks per second and report if below target

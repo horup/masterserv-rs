@@ -1,3 +1,4 @@
+24-09-2021  30m worked on messages between "subsystems"
 23-09-2021  30m worked on player and host messages, renamed game to hostedgame, refactored a bit
 22-09-2021  45m refactored structure a bit, worked on Host implementation, fixed some warnings, renamed HostServer to HostManager again as it makes more sense
 21-09-2021  60m worked on messages back and forth between major components, added logging

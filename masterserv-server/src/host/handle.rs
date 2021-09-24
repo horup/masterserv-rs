@@ -9,4 +9,3 @@ pub struct HostHandle {
     pub create_game:Arc<dyn Fn() -> Box<dyn HostedGame> + Sync + Send>,
     pub messages:Arc<Mutex<Vec<HostMsg>>>
 }
-

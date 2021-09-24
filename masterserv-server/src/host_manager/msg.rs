@@ -1,7 +1,7 @@
-use masterserv::uuid::Uuid;
+use masterserv::{GameMsg, uuid::Uuid};
 
 #[derive(Debug)]
-pub enum HostManagerMsg {
+pub enum HostManagerNorthMsg {
     SpawnHost {
         id:Uuid,
         name:String,
