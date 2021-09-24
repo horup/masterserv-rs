@@ -5,16 +5,13 @@
 			"path": "./doc"
 		},
 		{
-			"name": "lib",
 			"path": "./masterserv"
 		},
 
 		{
-			"name": "server",
 			"path": "masterserv-server"
 		},
 		{
-			"name": "testbench",
 			"path": "masterserv-testbench"
 		}
 	],

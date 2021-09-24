@@ -1,15 +1,15 @@
 use std::marker::PhantomData;
 
-use crate::Game;
+use crate::HostedGame;
 
-pub struct Host<T: Game> {
+pub struct Host<T: HostedGame> {
     pub name: String,
     pub current_players: u32,
     pub max_players: u32,
     data: PhantomData<T>,
 }
 
-impl<T: Game> Host<T> {
+impl<T: HostedGame> Host<T> {
     pub fn new(name: &str) -> Self {
         Host {
             name: name.into(),

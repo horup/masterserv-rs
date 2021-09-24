@@ -1,13 +1,13 @@
 use masterserv::uuid::Uuid;
 
 #[derive(Debug)]
-pub enum HostServerMsg {
+pub enum HostManagerMsg {
     SpawnHost {
         id:Uuid,
         name:String,
         game_type:String
     },
-    KillHost {
+    TerminateHost {
         id:Uuid
     }
 }

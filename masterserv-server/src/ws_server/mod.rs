@@ -1,13 +1,13 @@
 use masterserv::log::info;
 use tokio::{net::TcpListener, sync::mpsc::{UnboundedSender}, task::JoinHandle};
 
-use crate::HostServerMsg;
+use crate::HostManagerMsg;
 
 
 #[derive(Default)]
 pub struct WSServer { 
     addr:String,
-    host_manager:Option<UnboundedSender<HostServerMsg>>
+    host_manager:Option<UnboundedSender<HostManagerMsg>>
 }
 
 impl WSServer {
@@ -17,7 +17,7 @@ impl WSServer {
             host_manager:Default::default()
         }
     }
-    pub fn set_host_manager(&mut self, host_manager:UnboundedSender<HostServerMsg>) {
+    pub fn set_host_manager(&mut self, host_manager:UnboundedSender<HostManagerMsg>) {
         self.host_manager = Some(host_manager);
     }
     pub fn spawn(self) -> JoinHandle<()> {
@@ -26,7 +26,7 @@ impl WSServer {
             let try_socket = TcpListener::bind(&self.addr).await;
             let listener = try_socket.expect("WSServer: Failed to bind!");
         
-            while let Ok((stream, _)) = listener.accept().await {
+            while let Ok((_stream, _)) = listener.accept().await {
                 //tokio::spawn(accept(stream));
             }
         });

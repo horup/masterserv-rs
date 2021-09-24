@@ -3,7 +3,7 @@ use std::time::Instant;
 use log::info;
 use uuid::Uuid;
 
-use crate::{Game, GameType};
+use crate::{Context, HostedGame, GameType};
 
 pub struct DummyGame {
     pub test:f32,
@@ -22,12 +22,12 @@ impl GameType for DummyGame {
     const NAME:&'static str = "DummyGame";
 }
 
-impl Game for DummyGame {
+impl HostedGame for DummyGame {
     fn start(&mut self, _id:Uuid, name:String) {
         info!("Starting DummyGame with name '{}'", name);
     }
 
-    fn update(&mut self, _delta_sec:f32) {
+    fn update(&mut self, context:Context) {
         // do some work
        for y in 0..64 {
             for x in 0..64 {
