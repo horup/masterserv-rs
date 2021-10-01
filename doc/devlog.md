@@ -1,3 +1,4 @@
+1-10-2021   20m+ moved dummy_game to own crate
 24-09-2021  70m worked on messages between "subsystems", worked on bus refactoring, started working on tokio broadcast, added arc.drawio with architecture overview of the systems, worked on bus integration
 23-09-2021  30m worked on player and host messages, renamed game to hostedgame, refactored a bit
 22-09-2021  45m refactored structure a bit, worked on Host implementation, fixed some warnings, renamed HostServer to HostManager again as it makes more sense

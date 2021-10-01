@@ -1,5 +1,6 @@
+use dummy_game::DummyGame;
 use masterserv::log::{LevelFilter, info};
-use masterserv::{DummyGame, uuid::Uuid};
+use masterserv::{uuid::Uuid};
 use masterserv_server::{Bus, BusEvent, HostManager, WSServer};
 
 #[tokio::main]

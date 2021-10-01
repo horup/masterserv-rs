@@ -95,6 +95,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "dummy-game"
+version = "0.1.0"
+dependencies = [
+ "masterserv",
+ "serde",
+]
+
+[[package]]
 name = "env_logger"
 version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -299,6 +307,7 @@ dependencies = [
 name = "masterserv-testbench"
 version = "0.1.0"
 dependencies = [
+ "dummy-game",
  "env_logger",
  "masterserv",
  "masterserv-server",
