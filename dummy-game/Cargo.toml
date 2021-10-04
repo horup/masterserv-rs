@@ -7,4 +7,8 @@ edition = "2018"
 
 [dependencies]
 masterserv = {path = "../masterserv"}
+masterserv-server = {path = "../masterserv-server"}
 serde = {version = "1.0.130", features = ["derive"]}
+tokio = { version = "1", features = ["full"] }
+
+wasm-bindgen = "0.2.78"
