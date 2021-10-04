@@ -3,12 +3,14 @@ name = "dummy-game"
 version = "0.1.0"
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 masterserv = {path = "../masterserv"}
+wasm-bindgen = "0.2.78"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 masterserv-server = {path = "../masterserv-server"}
 serde = {version = "1.0.130", features = ["derive"]}
 tokio = { version = "1", features = ["full"] }
-
-wasm-bindgen = "0.2.78"
