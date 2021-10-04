@@ -16,14 +16,14 @@
 			"command":"wasm-pack",
 			"args": ["build", "--target", "web"],
 			"group": "build",
-			"label": "dummy-game: build frontend"
+			"label": "dummy-game: build client"
 		},
 		{
 			"type": "process",
 			"command":"basic-http-server",
 			"isBackground": true,
 			"group": "build",
-			"label": "dummy-game: serve frontend"
+			"label": "dummy-game: serve client"
 		}
 	]
 }

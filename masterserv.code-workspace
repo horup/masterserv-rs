@@ -14,9 +14,9 @@
 		{
 			"path": "masterserv-server"
 		},
-		{
+		/*{
 			"path": "masterserv-testbench"
-		}
+		}*/
 	],
 	"settings": {}
 }

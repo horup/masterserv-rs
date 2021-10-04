@@ -1,4 +1,4 @@
-04-10-2021  30m worked on dummy game
+04-10-2021  60m worked on dummy game, added canvas support to dummy game
 01-10-2021  20m+ moved dummy_game to own crate
 24-09-2021  70m worked on messages between "subsystems", worked on bus refactoring, started working on tokio broadcast, added arc.draw with architecture overview of the systems, worked on bus integration
 23-09-2021  30m worked on player and host messages, renamed game to hostedgame, refactored a bit

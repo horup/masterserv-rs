@@ -1,4 +1,4 @@
-use dummy_game::DummyGame;
+use dummy_game_lib::DummyGame;
 use masterserv::log::{LevelFilter, info};
 use masterserv::{uuid::Uuid};
 use masterserv_server::{Bus, BusEvent, HostManager, WSServer};
