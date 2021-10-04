@@ -17,7 +17,6 @@ pub fn start() {
         .map_err(|_| ())
         .unwrap();
 
-
     let context = canvas
         .get_context("2d")
         .unwrap()
@@ -25,6 +24,7 @@ pub fn start() {
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap();
 
+        
     context.begin_path();
 
     // Draw the outer circle.
