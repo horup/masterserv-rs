@@ -1,4 +1,4 @@
-05-10-2021  60m worked on dummy game, added platform abstraction, added update loop using a  bit of unsafe, added working image loading and rendering, added text support, added support for keyup/keydown
+05-10-2021  90m worked on dummy game, added platform abstraction, added update loop using a  bit of unsafe, added working image loading and rendering, added text support, added support for keyup/keydown, added basic state, added drawing of players with naming wip
 04-10-2021  60m worked on dummy game, added canvas support to dummy game
 01-10-2021  20m+ moved dummy_game to own crate
 24-09-2021  70m worked on messages between "subsystems", worked on bus refactoring, started working on tokio broadcast, added arc.draw with architecture overview of the systems, worked on bus integration

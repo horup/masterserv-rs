@@ -1,5 +1,3 @@
-use masterserv::log::info;
-
 use crate::shared::state::GameState;
 
 use super::platform::canvas::Canvas;
@@ -22,17 +20,37 @@ impl Client {
 
     pub fn init(&mut self) {
         self.canvas.set_image_src(0, "dummy.png");
+        self.state = GameState::demo();
     }
 
     pub fn draw(&self) {
         self.canvas.clear();
-        self.canvas.fill_rect(self.state.x, self.state.x, 50.0, 50.0);
-        self.canvas.draw_image(0, self.state.x, self.state.x);
-        self.canvas.fill_text("hello world", 0.0, 200.0);
+        let grid_size = 16.0;
+        
+
+        // draw debug circle of things
+        for (_, thing) in &self.state.things {
+            let x = thing.pos.x as f64 * grid_size;
+            let y = thing.pos.y as f64 * grid_size;
+            self.canvas.draw_circle(x, y, thing.radius as f64 * grid_size);
+        }
+
+        // draw things
+        for (_, thing) in &self.state.things {
+            let x = thing.pos.x as f64 * grid_size;
+            let y = thing.pos.y as f64 * grid_size;
+            self.canvas.draw_image(0, x, y);
+        }
+
+         // draw names of things
+         for (_, thing) in &self.state.things {
+            let x = thing.pos.x as f64 * grid_size;
+            let y = thing.pos.y as f64 * grid_size;
+            self.canvas.fill_text("SOH", x, y);
+        }
     }
 
     pub fn update(&mut self) {
-        self.state.x += 1.0;
         self.draw();
     }
 

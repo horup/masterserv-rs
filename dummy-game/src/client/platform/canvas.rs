@@ -1,3 +1,5 @@
+use std::f64::consts::PI;
+
 use wasm_bindgen::JsCast;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 
@@ -23,6 +25,8 @@ impl Canvas {
             .dyn_into::<web_sys::CanvasRenderingContext2d>()
             .unwrap();
 
+        context.set_image_smoothing_enabled(false);
+
         Canvas {
             context,
             canvas,
@@ -40,6 +44,12 @@ impl Canvas {
 
     pub fn clear(&self) {
         self.context.clear_rect(0.0, 0.0, self.width() as f64, self.height() as f64);
+    }
+
+    pub fn draw_circle(&self, x:f64, y:f64, r:f64) {
+        self.context.begin_path();
+        let _ = self.context.arc(x, y, r, 0.0, 2.0 * PI);
+        self.context.stroke();
     }
 
     pub fn fill_rect(&self, x:f64, y:f64, w:f64, h:f64) {
@@ -62,5 +72,7 @@ impl Canvas {
         }
     }
 
-
+    pub fn scale(&self, x:f64, y:f64) {
+        let _ = self.context.scale(x, y);
+    }
 }
