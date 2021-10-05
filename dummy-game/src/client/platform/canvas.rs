@@ -1,9 +1,10 @@
 use wasm_bindgen::JsCast;
-use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
+use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 
 pub struct Canvas {
     context:CanvasRenderingContext2d,
-    canvas:HtmlCanvasElement
+    canvas:HtmlCanvasElement,
+    images:[HtmlImageElement;1]
 }
 
 impl Canvas {
@@ -24,7 +25,8 @@ impl Canvas {
 
         Canvas {
             context,
-            canvas
+            canvas,
+            images:[HtmlImageElement::new().unwrap()]
         }
     }
 
@@ -47,4 +49,18 @@ impl Canvas {
     pub fn fill_text(&self, text:&str, x:f64, y:f64) {
         let _ = self.context.fill_text(text, x, y);
     }
+
+    pub fn set_image_src(&self, img:usize, src:&str) {
+        if let Some(img) = self.images.get(img) {
+            img.set_src(src);
+        }
+    }
+
+    pub fn draw_image(&self, img:usize, x:f64, y:f64) {
+        if let Some(img) = self.images.get(img) {
+            let _ = self.context.draw_image_with_html_image_element(&img, x, y);
+        }
+    }
+
+
 }

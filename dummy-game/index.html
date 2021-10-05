@@ -60,6 +60,22 @@
         import init from './pkg/dummy_game_lib.js';
         let res = await init();
         res.start();
+
+        let update = () => {
+            res.update();
+            requestAnimationFrame(update);
+        }
+        
+        update();
+
+        document.addEventListener('keydown', e=>{
+            res.keydown(e.keyCode);
+        });
+
+        document.addEventListener('keyup', e=>{
+            res.keyup(e.keyCode);
+        });
+        
     </script>
 </body>
 
