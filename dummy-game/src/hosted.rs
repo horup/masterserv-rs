@@ -1,36 +1,22 @@
-use std::time::Instant;
+use std::collections::HashMap;
 
-use masterserv::{Context, GameMsg, GameType, HostedGame};
-use masterserv::{bincode, uuid::Uuid, log::info};
-use serde::{Serialize, Deserialize};
+use masterserv::uuid::Uuid;
+use masterserv::{Context, GameType, HostedGame, Player};
+use masterserv::{log::info};
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-pub struct DummyState{
-    pub grid:[[u8;16];16]
-}
-
-#[derive(Serialize)]
-pub enum DummyMsg {
-    State(DummyState)
-}
-
-impl Default for DummyState {
-    fn default() -> Self {
-        Self { grid: [[0;16];16]}
-    }
-}
+use crate::shared::state::GameState;
 
 pub struct DummyGame {
-    pub test:f32,
-    pub missed_count:u32,
-    pub start_time:Instant,
-    pub ticks:u64,
-    pub current_state:DummyState
+    pub current_state:GameState,
+    pub players:HashMap<Uuid, Player>
 }
 
 impl Default for DummyGame {
     fn default() -> Self {
-        Self { test: Default::default(), missed_count: Default::default(), start_time: Instant::now(), ticks:0, current_state:DummyState::default() }
+        Self {
+            current_state:GameState::demo(),
+            players:HashMap::new()
+        }
     }
 }
 
@@ -44,30 +30,20 @@ impl HostedGame for DummyGame {
     }
 
     fn update(&mut self, context:&mut Context) {
-        // do some work
-        for row in &mut self.current_state.grid {
-            for col in row.iter_mut() {
-                *col = 0;
+        for msg in &context.messages_from_host {
+            match msg {
+                masterserv::HostMsg::PlayerJoined(player) => {
+                    info!("Player {} joined the game.", {player.id});
+                    self.players.insert(player.id, player.clone());
+                },
+                masterserv::HostMsg::PlayerLeft(player) => {
+                    info!("Player {} left the game.", {player.id});
+                    self.players.remove(&player.id);
+                },
+                masterserv::HostMsg::Terminate => todo!(),
+                masterserv::HostMsg::FromPlayer(_, _) => todo!(),
             }
         }
-
-        // push a custom message containing the game state
-        if let Ok(encoded) = bincode::serialize(&self.current_state) {
-            context.push_message(GameMsg::CustomAll(encoded));
-        }
-
-        // calc ticks per second and report if below target
-        let ticks_per_second = self.ticks as f64 / (Instant::now() - self.start_time).as_secs_f64();
-        if ticks_per_second < self.tick_rate() as f64 {
-            self.missed_count += 1;
-            if self.missed_count > 4 {
-                println!("{}", ticks_per_second);
-            }
-        } else {
-            self.missed_count = 0;
-        }
-
-        self.ticks += 1;
     }
 
     fn stop(&mut self) {
