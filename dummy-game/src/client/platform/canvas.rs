@@ -1,6 +1,6 @@
 use std::f64::consts::PI;
 
-use wasm_bindgen::JsCast;
+use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 
 pub struct Canvas {
@@ -26,6 +26,9 @@ impl Canvas {
             .unwrap();
 
         context.set_image_smoothing_enabled(false);
+        context.set_font("1px Arial");
+        context.set_text_align("center");
+        context.set_text_baseline("middle");
 
         Canvas {
             context,
@@ -66,13 +69,24 @@ impl Canvas {
         }
     }
 
-    pub fn draw_image(&self, img:usize, x:f64, y:f64) {
+    pub fn draw_normalized_image(&self, img:usize, x:f64, y:f64) {
         if let Some(img) = self.images.get(img) {
-            let _ = self.context.draw_image_with_html_image_element(&img, x, y);
+            //let _ = self.context.draw_image_with_html_image_element(&img, x, y);
+            let image = img;
+            let dx = x - 0.5;
+            let dy = y - 0.5;
+            let dw = 1.0;
+            let dh = 1.0;
+            let _ = self.context.draw_image_with_html_image_element_and_dw_and_dh(image, dx, dy, dw, dh);
         }
     }
 
-    pub fn _scale(&self, x:f64, y:f64) {
-        let _ = self.context.scale(x, y);
+    pub fn set_scale(&self, scale:f64) {
+        let _ = self.context.set_transform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+        let _ = self.context.scale(scale, scale);
+
+        //self.context.set_stroke_style(&JsValue::from_str("red"));
+        self.context.set_line_width(1.0 / scale);
+        
     }
 }

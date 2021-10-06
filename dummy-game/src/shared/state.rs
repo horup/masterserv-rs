@@ -4,7 +4,8 @@ use glam::Vec2;
 pub struct Thing {
     pub pos:Vec2,
     pub vel:Vec2,
-    pub radius:f32
+    pub radius:f32,
+    pub name:String
 }
 
 impl Thing {
@@ -12,7 +13,8 @@ impl Thing {
         Self {
             pos:[x, y].into(),
             vel:[0.0, 0.0].into(),
-            radius:0.5
+            radius:0.5,
+            name:"".into()
         }
     }
 }
@@ -34,8 +36,9 @@ impl GameState {
         let mut state = Self::new();
         
         // make some players
-        for _i in 0..10 {
-            let thing = Thing::new(rand::random::<f32>() * 40.0, rand::random::<f32>() * 30.0);
+        for i in 0..10 {
+            let mut thing = Thing::new(rand::random::<f32>() * 40.0, rand::random::<f32>() * 30.0);
+            thing.name = format!("P{}", i);
             state.things.insert(thing);
         }
 

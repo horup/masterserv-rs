@@ -1,3 +1,5 @@
+use masterserv::log::info;
+
 use crate::shared::state::GameState;
 
 use super::platform::canvas::Canvas;
@@ -26,27 +28,28 @@ impl Client {
     pub fn draw(&self) {
         self.canvas.clear();
         let grid_size = 16.0;
+        self.canvas.set_scale(grid_size);
         
 
         // draw debug circle of things
         for (_, thing) in &self.state.things {
-            let x = thing.pos.x as f64 * grid_size;
-            let y = thing.pos.y as f64 * grid_size;
-            self.canvas.draw_circle(x, y, thing.radius as f64 * grid_size);
+            let x = thing.pos.x as f64;
+            let y = thing.pos.y as f64;
+            self.canvas.draw_circle(x, y, thing.radius as f64);
         }
 
         // draw things
         for (_, thing) in &self.state.things {
-            let x = thing.pos.x as f64 * grid_size;
-            let y = thing.pos.y as f64 * grid_size;
-            self.canvas.draw_image(0, x, y);
+            let x = thing.pos.x as f64;
+            let y = thing.pos.y as f64;
+            self.canvas.draw_normalized_image(0, x, y);
         }
 
-         // draw names of things
-         for (_, thing) in &self.state.things {
-            let x = thing.pos.x as f64 * grid_size;
-            let y = thing.pos.y as f64 * grid_size;
-            self.canvas.fill_text("SOH", x, y);
+        // draw names of things
+        for (_, thing) in &self.state.things {
+            let x = thing.pos.x as f64;
+            let y = thing.pos.y as f64;
+            self.canvas.fill_text(&thing.name, x, y - 1.0);
         }
     }
 
@@ -58,6 +61,18 @@ impl Client {
     }
 
     pub fn keydown(&mut self, _code:KeyCode) {
+        // w = 87
+        // s = 83
+        // a = 65
+        // d = 68
+        // space = 32
+        // up = 38
+        // down = 40
+        // left = 37
+        // right = 39
+        // esc = 27
+
+        info!("{}", _code);
     }
 }
 
