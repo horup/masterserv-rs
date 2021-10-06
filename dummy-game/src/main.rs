@@ -1,13 +1,13 @@
 use dummy_game_lib::DummyGame;
 
 use masterserv::{GameType, log::{LevelFilter, info}, uuid::Uuid};
-use masterserv_server::{HostManager, Bus, WSServer};
+use masterserv_server::{Bus, HostManager, WSServer, WebServer};
 
 #[tokio::main]
 async fn main() {
     env_logger::builder().filter_level(LevelFilter::Debug).init();
     let bus = Bus::default();
-    let ws_server = WSServer::new("0.0.0.0:8080".into(), bus.clone());
+    let web_server = WebServer::new("0.0.0.0:8080".into(), bus.clone());
     let mut host_manager = HostManager::new(bus.clone());
 
     // configure
@@ -17,9 +17,9 @@ async fn main() {
 
     // spawn
     let host_manager = host_manager.spawn();
-    let ws_server = ws_server.spawn();
+    let web_server = web_server.spawn();
 
     info!("Starting server");
     let _ = host_manager.await;
-    let _ = ws_server.await;
+    let _ = web_server.await;
 }

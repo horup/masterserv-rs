@@ -45,6 +45,9 @@ pub use bus::*;
 mod ws_server;
 pub use ws_server::*;
 
+mod web_server;
+pub use web_server::*;
+
 mod host_manager;
 pub use host_manager::*;
 

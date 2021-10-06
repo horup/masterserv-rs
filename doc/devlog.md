@@ -2,7 +2,7 @@
 09-10-2021  
 08-10-2021  
 07-10-2021  
-06-10-2021  50m fixed warnings, improved rendering using canvas scale, fixed text alignment, added naming of things, mapped keys, worked a bit on server, seems i can replace tungsten with warp to ease websocket
+06-10-2021  65m fixed warnings, improved rendering using canvas scale, fixed text alignment, added naming of things, mapped keys, worked a bit on server, started adding web_server using warp
 05-10-2021  90m worked on dummy game, added platform abstraction, added update loop using a  bit of unsafe, added working image loading and rendering, added text support, added support for keyup/keydown, added basic state, added drawing of players with naming wip
 04-10-2021  60m worked on dummy game, added canvas support to dummy game
 01-10-2021  20m+ moved dummy_game to own crate
