@@ -1,7 +1,7 @@
 use masterserv::{GameType, HostMsg, HostedGame, log::{debug, error, info}, uuid::{Uuid}};
 use std::{collections::HashMap, sync::{Arc, Mutex}};
 
-use tokio::{sync::watch::error, task::JoinHandle};
+use tokio::{task::JoinHandle};
 
 use crate::{Bus, Host, HostHandle};
 
@@ -66,10 +66,10 @@ impl HostManager {
                     Ok(event) => {
                         debug!("Received: {:?}", event);
                         match event {
-                            crate::BusEvent::ClientConnected { client_id } => {
+                            crate::BusEvent::ClientConnected { client_id: _ } => {
 
                             },
-                            crate::BusEvent::ClientDisconnected { client_id } => {
+                            crate::BusEvent::ClientDisconnected { client_id: _ } => {
 
                             },
                             crate::BusEvent::SpawnHost { host_id, name, game_type } => {
@@ -78,10 +78,10 @@ impl HostManager {
                             crate::BusEvent::TerminateHost { host_id } => {
                                 self.kill_host(host_id);
                             },
-                            crate::BusEvent::ClientJoinedHost { host_id } => {
+                            crate::BusEvent::ClientJoinedHost { host_id : _ } => {
 
                             },
-                            crate::BusEvent::ClientLeftHost { host_id } => {
+                            crate::BusEvent::ClientLeftHost { host_id: _ } => {
 
                             },
                         }

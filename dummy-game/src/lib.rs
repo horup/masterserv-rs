@@ -8,7 +8,7 @@ mod client;
 pub mod shared;
 
 
-static mut global_client:Option<Client> = None;
+static mut GLOBAL_CLIENT:Option<Client> = None;
 
 #[wasm_bindgen]
 pub fn start() {
@@ -17,14 +17,14 @@ pub fn start() {
     unsafe {
         let mut client = Client::new();
         client.init();
-        global_client = Some(client);
+        GLOBAL_CLIENT = Some(client);
     }
 }
 
 #[wasm_bindgen]
 pub fn update() {
     unsafe {
-        if let Some(client) = &mut global_client {
+        if let Some(client) = &mut GLOBAL_CLIENT {
             client.update();
         }
     }
@@ -33,7 +33,7 @@ pub fn update() {
 #[wasm_bindgen]
 pub fn keyup(keycode:u32) {
     unsafe {
-        if let Some(client) = &mut global_client {
+        if let Some(client) = &mut GLOBAL_CLIENT {
             client.keyup(keycode);
         }
     }
@@ -43,7 +43,7 @@ pub fn keyup(keycode:u32) {
 #[wasm_bindgen]
 pub fn keydown(keycode:u32) {
     unsafe {
-        if let Some(client) = &mut global_client {
+        if let Some(client) = &mut GLOBAL_CLIENT {
             client.keydown(keycode);
         }
     }

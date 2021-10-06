@@ -52,7 +52,7 @@ impl Canvas {
         self.context.stroke();
     }
 
-    pub fn fill_rect(&self, x:f64, y:f64, w:f64, h:f64) {
+    pub fn _fill_rect(&self, x:f64, y:f64, w:f64, h:f64) {
         self.context.fill_rect(x, y, w, h);
     }
 
@@ -72,7 +72,7 @@ impl Canvas {
         }
     }
 
-    pub fn scale(&self, x:f64, y:f64) {
+    pub fn _scale(&self, x:f64, y:f64) {
         let _ = self.context.scale(x, y);
     }
 }

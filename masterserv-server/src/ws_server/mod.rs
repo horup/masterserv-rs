@@ -1,19 +1,20 @@
 use masterserv::log::info;
-use tokio::{net::TcpListener, sync::{broadcast::{Receiver, Sender}, mpsc::{self, UnboundedReceiver, UnboundedSender}}, task::JoinHandle};
+use tokio::{net::TcpListener, sync::{mpsc::{self}}};
+use tokio::task::JoinHandle;
 
-use crate::{Bus, BusEvent};
+use crate::{Bus,};
 
 mod msg;
 pub use msg::*;
 
 pub struct WSServer { 
     addr:String,
-    bus:Bus
+    pub bus:Bus
 }
 
 impl WSServer {
     pub fn new(addr:String, bus:Bus) -> Self {
-        let (tx, rx) = mpsc::unbounded_channel::<WSServerMsg>();
+        let (_tx, _rx) = mpsc::unbounded_channel::<WSServerMsg>();
         Self {
             addr,
             bus

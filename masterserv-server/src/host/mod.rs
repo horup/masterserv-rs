@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use masterserv::{Context, HostMsg, log::{debug, info}};
+use masterserv::{Context, HostMsg, log::{info}};
 
 mod handle;
 pub use handle::*;
@@ -58,7 +58,7 @@ impl Host {
 
             game.update(&mut context);
 
-            for msg in context.messages_from_game {
+            for _msg in context.messages_from_game {
                 
             }
 

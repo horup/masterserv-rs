@@ -9,7 +9,7 @@ pub struct Bus {
 
 impl Clone for Bus {
     fn clone(&self) -> Self {
-        let mut send = self.send.clone();
+        let send = self.send.clone();
         let recv = send.subscribe();
         Self { send, recv }
     }

@@ -54,10 +54,10 @@ impl Client {
         self.draw();
     }
 
-    pub fn keyup(&mut self, code:KeyCode) {
+    pub fn keyup(&mut self, _code:KeyCode) {
     }
 
-    pub fn keydown(&mut self, code:KeyCode) {
+    pub fn keydown(&mut self, _code:KeyCode) {
     }
 }
 

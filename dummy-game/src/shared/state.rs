@@ -34,8 +34,8 @@ impl GameState {
         let mut state = Self::new();
         
         // make some players
-        for i in 0..10 {
-            let mut thing = Thing::new(rand::random::<f32>() * 40.0, rand::random::<f32>() * 30.0);
+        for _i in 0..10 {
+            let thing = Thing::new(rand::random::<f32>() * 40.0, rand::random::<f32>() * 30.0);
             state.things.insert(thing);
         }
 
