@@ -2,11 +2,12 @@ use masterserv::log::info;
 
 use crate::shared::state::GameState;
 
-use super::platform::canvas::Canvas;
+use super::platform::{canvas::Canvas, web_socket::WebSocket};
 
 
 pub struct Client {
     canvas:Canvas,
+    socket:WebSocket,
     state:GameState
 }
 
@@ -16,7 +17,8 @@ impl Client {
     pub fn new() -> Self {
         Self {
             canvas:Canvas::new(),
-            state:GameState::new()
+            state:GameState::new(),
+            socket:WebSocket::new()
         }
     }
 

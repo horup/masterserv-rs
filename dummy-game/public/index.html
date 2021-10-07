@@ -58,25 +58,73 @@
 
     </canvas>
     <script type="module">
-        import init from './pkg/dummy_game_lib.js';
-        let res = await init();
-        res.start();
+       
+        import init, {message, start, update, keydown, keyup, connected, disconnected} from './pkg/dummy_game_lib.js';
+      
+        async function run() {
+            let res = await init();
 
-        let update = () => {
-            res.update();
-            requestAnimationFrame(update);
+            window.send = (msg) => {
+            };
+           
+            start();
+            let _update = () => {
+                update();
+                requestAnimationFrame(_update);
+            }
+
+            _update();
+    
+            document.addEventListener('keydown', e=>{
+                keydown(e.keyCode);
+            });
+    
+            document.addEventListener('keyup', e=>{
+                keyup(e.keyCode);
+            });
+
+            let ws = null;
+
+            let connect = ()=> {
+                ws = new WebSocket("ws://" + location.host);
+                ws.onopen = ()=>{
+                    console.log("onopen");
+                    connected();
+                }
+                ws.onmessage = (e)=>{
+                    console.log("onmessage");
+                    message(e.data);
+                }
+                ws.onerror = ()=>{
+                    console.log("onerror");
+                    ws.close();
+                }
+
+                ws.onclose = ()=>{
+                    console.log("onclose");
+                    disconnected();
+                    connect();
+                }
+
+                window.send = (msg) => {
+                    if (ws != null && ws.readyState === WebSocket.OPEN) {
+                        ws.send("hello world");
+                    }
+
+                    console.log("send");
+                }
+            };
+
+            connect();
+    
+            /*
+            let data = new Uint8Array(5);
+            data[0] = 1;
+            data[4] = 5;*/
+            //message(data);
         }
-        
-        update();
 
-        document.addEventListener('keydown', e=>{
-            res.keydown(e.keyCode);
-        });
-
-        document.addEventListener('keyup', e=>{
-            res.keyup(e.keyCode);
-        });
-        
+        run();
     </script>
 </body>
 

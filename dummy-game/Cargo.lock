@@ -123,6 +123,7 @@ dependencies = [
  "env_logger",
  "generational-arena",
  "glam",
+ "js-sys",
  "masterserv",
  "masterserv-server",
  "rand 0.8.4",

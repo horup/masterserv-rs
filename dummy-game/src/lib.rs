@@ -3,6 +3,9 @@ use client::Client;
 pub use hosted::*;
 
 use wasm_bindgen::prelude::*;
+use js_sys::Uint8Array;
+use masterserv::log::info;
+use wasm_bindgen::prelude::*;
 mod client;
 
 pub mod shared;
@@ -26,6 +29,7 @@ pub fn update() {
     unsafe {
         if let Some(client) = &mut GLOBAL_CLIENT {
             client.update();
+            send(&[0, 0, 0]);
         }
     }
 }
@@ -39,7 +43,6 @@ pub fn keyup(keycode:u32) {
     }
 }
 
-
 #[wasm_bindgen]
 pub fn keydown(keycode:u32) {
     unsafe {
@@ -49,3 +52,22 @@ pub fn keydown(keycode:u32) {
     }
 }
 
+#[wasm_bindgen]
+pub fn connected() {
+    info!("Connected!");
+}
+
+#[wasm_bindgen]
+pub fn disconnected() {
+    info!("DisConnected!");
+}
+
+#[wasm_bindgen]
+pub fn message(data:&[u8]) {
+    info!("message: {}", data.len());
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn send(data:&[u8]);
+}
