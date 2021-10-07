@@ -23,7 +23,7 @@ impl WebServer {
             let addr = SocketAddr::from_str(&self.addr).expect("Could not parse address");
             let routes = warp::any().map(|| "Hello, World!");
             //warp::serve(routes)
-            warp::serve(warp::fs::dir("./"))
+            warp::serve(warp::fs::dir("./public"))
             .run(addr).await;
         });
     }

@@ -14,7 +14,7 @@
 		{
 			"type": "process",
 			"command":"wasm-pack",
-			"args": ["build", "--target", "web"],
+			"args": ["build", "--target", "web", "--out-dir", "public/pkg"],
 			"group": "build",
 			"label": "dummy-game: build client"
 		},
