@@ -89,40 +89,31 @@
             let connect = ()=> {
                 ws = new WebSocket("ws://" + location.host);
                 ws.onopen = ()=>{
-                    console.log("onopen");
                     connected();
                 }
                 ws.onmessage = (e)=>{
-                    console.log("onmessage");
-                    message(e.data);
+                    e.data.arrayBuffer().then(buffer => {
+                        var buffer = new Uint8Array(buffer);
+                        message(buffer);
+                    })
                 }
                 ws.onerror = ()=>{
-                    console.log("onerror");
                     ws.close();
                 }
 
                 ws.onclose = ()=>{
-                    console.log("onclose");
                     disconnected();
                     connect();
                 }
 
                 window.send = (msg) => {
                     if (ws != null && ws.readyState === WebSocket.OPEN) {
-                        ws.send("hello world");
+                        ws.send(msg);
                     }
-
-                    console.log("send");
                 }
             };
 
             connect();
-    
-            /*
-            let data = new Uint8Array(5);
-            data[0] = 1;
-            data[4] = 5;*/
-            //message(data);
         }
 
         run();

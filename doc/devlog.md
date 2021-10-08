@@ -1,6 +1,6 @@
 10-10-2021  
 09-10-2021  
-08-10-2021  30m worked on websocket and client server messages
+08-10-2021  110m worked on websocket and client server messages, got handshake to work between client and server :-)
 07-10-2021  100m added websocket support to warp, got client to connect from browser, not working 100% though
 06-10-2021  65m fixed warnings, improved rendering using canvas scale, fixed text alignment, added naming of things, mapped keys, worked a bit on server, started adding web_server using warp
 05-10-2021  90m worked on dummy game, added platform abstraction, added update loop using a  bit of unsafe, added working image loading and rendering, added text support, added support for keyup/keydown, added basic state, added drawing of players with naming wip

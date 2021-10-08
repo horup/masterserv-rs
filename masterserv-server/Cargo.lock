@@ -434,6 +434,7 @@ dependencies = [
 name = "masterserv-server"
 version = "0.1.0"
 dependencies = [
+ "bincode",
  "futures-util",
  "masterserv",
  "tokio",

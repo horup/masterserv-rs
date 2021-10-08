@@ -41,6 +41,8 @@ pub fn update() {
                     }
                 }
             }
+
+            client.client_messages.clear();
         }
     }
 }
@@ -67,6 +69,8 @@ pub fn keydown(keycode:u32) {
 pub fn connected() {
     unsafe {
         if let Some(client) = &mut GLOBAL_CLIENT {
+            client.client_messages.clear();
+            client.server_messages.clear();
             client.connected();
         }
     }
@@ -76,6 +80,8 @@ pub fn connected() {
 pub fn disconnected() {
     unsafe {
         if let Some(client) = &mut GLOBAL_CLIENT {
+            client.client_messages.clear();
+            client.server_messages.clear();
             client.disconnected();
         }
     }
@@ -87,7 +93,7 @@ pub fn message(data:&[u8]) {
         if let Some(client) = &mut GLOBAL_CLIENT {
             match bincode::deserialize::<ServerMsg>(data) {
                 Ok(msg) => {
-
+                    client.server_messages.push(msg);
                 }
                 Err(err) => {
                     error!("{:?}", err);
