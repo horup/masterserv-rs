@@ -1,14 +1,15 @@
-use masterserv::log::info;
+use masterserv::{log::info, protocols::{ClientMsg, ServerMsg}};
 
 use crate::shared::state::GameState;
 
-use super::platform::{canvas::Canvas, web_socket::WebSocket};
+use super::platform::{canvas::Canvas};
 
 
 pub struct Client {
     canvas:Canvas,
-    socket:WebSocket,
-    state:GameState
+    state:GameState,
+    pub server_messages:Vec<ServerMsg>,
+    pub client_messages:Vec<ClientMsg>
 }
 
 pub type KeyCode = u32;
@@ -18,7 +19,8 @@ impl Client {
         Self {
             canvas:Canvas::new(),
             state:GameState::new(),
-            socket:WebSocket::new()
+            server_messages:Vec::new(),
+            client_messages:Vec::new()
         }
     }
 
@@ -31,7 +33,6 @@ impl Client {
         self.canvas.clear();
         let grid_size = 16.0;
         self.canvas.set_scale(grid_size);
-        
 
         // draw debug circle of things
         for (_, thing) in &self.state.things {
@@ -56,6 +57,10 @@ impl Client {
     }
 
     pub fn update(&mut self) {
+        for msg in &self.server_messages {
+            info!("{:?}", msg);
+        }
+
         self.draw();
     }
 
@@ -75,6 +80,14 @@ impl Client {
         // esc = 27
 
         info!("{}", _code);
+    }
+
+    pub fn connected(&mut self) {
+
+    }
+
+    pub fn disconnected(&mut self) {
+
     }
 }
 

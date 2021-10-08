@@ -4,7 +4,7 @@ pub use hosted::*;
 
 use wasm_bindgen::prelude::*;
 use js_sys::Uint8Array;
-use masterserv::log::info;
+use masterserv::{log::{error, info}, protocols::ServerMsg};
 use wasm_bindgen::prelude::*;
 mod client;
 
@@ -29,7 +29,18 @@ pub fn update() {
     unsafe {
         if let Some(client) = &mut GLOBAL_CLIENT {
             client.update();
-            send(&[0, 0, 0]);
+            client.server_messages.clear();
+
+            for msg in &client.client_messages {
+                match bincode::serialize(msg) {
+                    Ok(v) => {
+                        send(&v);
+                    }
+                    Err(v) => {
+                        error!("{:?}", v);
+                    }
+                }
+            }
         }
     }
 }
@@ -54,17 +65,36 @@ pub fn keydown(keycode:u32) {
 
 #[wasm_bindgen]
 pub fn connected() {
-    info!("Connected!");
+    unsafe {
+        if let Some(client) = &mut GLOBAL_CLIENT {
+            client.connected();
+        }
+    }
 }
 
 #[wasm_bindgen]
 pub fn disconnected() {
-    info!("DisConnected!");
+    unsafe {
+        if let Some(client) = &mut GLOBAL_CLIENT {
+            client.disconnected();
+        }
+    }
 }
 
 #[wasm_bindgen]
 pub fn message(data:&[u8]) {
-    info!("message: {}", data.len());
+    unsafe {
+        if let Some(client) = &mut GLOBAL_CLIENT {
+            match bincode::deserialize::<ServerMsg>(data) {
+                Ok(msg) => {
+
+                }
+                Err(err) => {
+                    error!("{:?}", err);
+                }
+            }
+        }
+    }
 }
 
 #[wasm_bindgen]

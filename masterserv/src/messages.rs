@@ -1,5 +1,6 @@
 use uuid::Uuid;
 use crate::Player;
+use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug)]
 pub enum HostMsg {
